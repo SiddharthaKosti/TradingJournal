@@ -3,7 +3,7 @@ import streamlit as st
 from pathlib import Path
 import os
 
-def trades_data(df, csv_file):
+def trade_data(df, csv_file):
     # Function to calculate derived columns
     def calculate_derived_columns(df):
         # Convert date_in and date_out to datetime if they're not already
@@ -13,7 +13,7 @@ def trades_data(df, csv_file):
         df["balance_left"] = df["price_in"] * df["quantity_left"]
         df["P/L (INR)"] = (df["price_out"] - df["price_in"]) * (df["quantity_in"] - df["quantity_left"])
         df["P/L in %"] = df.apply(lambda row: 0 if pd.isna(row["price_out"]) else 
-                                        (row["price_out"] - row["price_in"]) / row["price_in"], axis=1)
+                                        ((row["price_out"] - row["price_in"]) / row["price_in"]) * 100, axis=1)
         df["days_taken"] = df.apply(lambda row: 0 if pd.isna(row["date_out"]) or pd.isna(row["date_in"]) else 
                                     (row["date_out"] - row["date_in"]).days, axis=1)
         return df

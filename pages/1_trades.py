@@ -7,10 +7,10 @@ import plotly.express as px
 import sys
 
 sys.path.append('..')
-from trade_summaries import trade_summaries
-from monthly_profit_graph import monthly_profit_graph
-from yearly_performance import yearly_performance
-from trades_data import trades_data
+from src.trades_analysis.trade_summaries import trade_summaries
+from src.trades_analysis.monthly_profit_graph import monthly_profit_graph
+from src.trades_analysis.yearly_performance import yearly_performance
+from src.trades_analysis.trade_data import trade_data
 
 # Set page configuration with a custom theme
 st.set_page_config(
@@ -73,7 +73,7 @@ st.title("📊 Trade Data Management")
 tab1, tab2, tab3, tab4 = st.tabs(["📝 Add/Edit Trades", "📊 Trade Summaries", "📈 Monthly Profit Graph", ":chart: Yearly Performance"])
 
 with tab1:
-    trades_data(df, csv_file)
+    trade_data(df, csv_file)
 
 with tab2:
     trade_summaries(df)
