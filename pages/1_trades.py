@@ -49,7 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-csv_file = Path("C:/Users/User/Downloads/sid_kosti/skorm_trade_journey/SKORM Journal - 2024.csv")
+csv_file = Path("trade_data.csv")
 columns = [
     "script_name", "trade_base", "price_in", "quantity_in", "quantity_left", "date_in", 
     "amount_in", "balance_left", "date_out", "price_out",
@@ -57,7 +57,6 @@ columns = [
 ]
 
 # Check if CSV file exists
-csv_file = Path("C:/Users/User/Downloads/sid_kosti/skorm_trade_journey/SKORM_Journal.csv")
 if os.path.exists(csv_file):
     # Read existing CSV file
     df = pd.read_csv(csv_file, parse_dates=["date_in", "date_out"])
