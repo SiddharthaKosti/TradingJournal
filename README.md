@@ -37,9 +37,6 @@ Open your web browser and navigate to `http://localhost:8501` to access the app.
 - `src/trades_analysis/monthly_profit_graph.py`: Functions for visualizing monthly profit data.
 - `src/trades_analysis/yearly_performance.py`: Functions for visualizing yearly performance data.
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
-
 ## License
 This project is licensed under the MIT License.
 
