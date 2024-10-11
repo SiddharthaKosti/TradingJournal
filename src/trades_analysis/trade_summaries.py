@@ -67,17 +67,19 @@ def trade_summaries(df):
             st.metric(f"{base} ({int(row['script_name'])} trades)", f"₹{row['P/L (INR)']:.2f}", delta=None, delta_color="off")
 
     st.divider()
-    # Display top profitable trades by amount and percentage
+    # Display top profitable trades by amount and percentage with variable input
+    st.header("Top Profitable trades")
+    num_trades_to_display = st.number_input("Number of Trades to Display", min_value=1, value=5)
     col1, col2 = st.columns(2)
+
     with col1:
-        st.subheader("Top 5 Profitable Trades by Amount")
+        st.subheader("By Amount")
         top_by_amount = df.groupby("script_name").agg({
             "P/L (INR)": "sum",
             "P/L in %": "mean",
             "price_in": "mean",
             "price_out": "mean"
-        }).nlargest(5, "P/L (INR)")
-        top_by_amount["P/L in %"] *= 100  # Multiply %profit by 100
+        }).nlargest(num_trades_to_display, "P/L (INR)")
         styled_df_amount = top_by_amount.reset_index()
 
         # Apply styling and display
@@ -88,14 +90,13 @@ def trade_summaries(df):
 
 
     with col2:
-        st.subheader("Top 5 Profitable Trades by Percentage")
+        st.subheader("By Percentage")
         top_by_percentage = df.groupby("script_name").agg({
             "P/L (INR)": "sum",
             "P/L in %": "mean",
             "price_in": "mean",
             "price_out": "mean"
-        }).nlargest(5, "P/L in %")
-        top_by_percentage["P/L in %"] *= 100  # Multiply %profit by 100
+        }).nlargest(num_trades_to_display, "P/L in %")
         styled_df_percentage = top_by_percentage.reset_index()
         # Apply styling and display
         st.dataframe(
@@ -104,16 +105,16 @@ def trade_summaries(df):
         )
 
     st.divider()
-    # Display top fastest and slowest trades
+    # Display top fastest and slowest trades with user input for number of trades
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("Top 5 Fastest Trades")
-        top_by_fastest = df[df["days_taken"] > 0].nsmallest(5, "days_taken")[["script_name", "days_taken", "P/L (INR)", "P/L in %", "price_in", "price_out", "trade_base"]]
-        top_by_fastest["P/L in %"] *= 100  # Multiply %profit by 100
+        st.subheader("Top Fastest Trades")
+        num_fastest_trades = st.number_input("Number of Fastest Trades to Display", min_value=1, value=5)
+        top_by_fastest = df[df["days_taken"] > 0].nsmallest(num_fastest_trades, "days_taken")[["script_name", "days_taken", "P/L (INR)", "P/L in %", "price_in", "price_out", "trade_base"]]
         st.dataframe(style_dataframe(top_by_fastest), use_container_width=True)
 
     with col2:
-        st.subheader("Top 5 Slowest Trades")
-        top_by_slowest = df[df["days_taken"] > 0].nlargest(5, "days_taken")[["script_name", "days_taken", "P/L (INR)", "P/L in %", "price_in", "price_out", "trade_base"]]
-        top_by_slowest["P/L in %"] *= 100  # Multiply %profit by 100
+        st.subheader("Top Slowest Trades")
+        num_slowest_trades = st.number_input("Number of Slowest Trades to Display", min_value=1, value=5)
+        top_by_slowest = df[df["days_taken"] > 0].nlargest(num_slowest_trades, "days_taken")[["script_name", "days_taken", "P/L (INR)", "P/L in %", "price_in", "price_out", "trade_base"]]
         st.dataframe(style_dataframe(top_by_slowest), use_container_width=True)
