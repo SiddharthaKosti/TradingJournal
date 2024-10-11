@@ -27,7 +27,7 @@ The Trade Data Management app is a Streamlit application designed to help users 
 Run the Streamlit app using the following command:
 
 
-Open your web browser and navigate to `http://localhost:8501` to access the app.
+Open your web browser and navigate to `http://localhost:8501` to access the app. Alternatively, you can access it here: https://tradingjournal.streamlit.app/trades
 
 ## File Structure
 - `app.py`: Main entry point for the application.
