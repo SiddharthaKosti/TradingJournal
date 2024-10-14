@@ -58,10 +58,10 @@ def trade_data(df, csv_file):
     st.write(":green-background[**Fully Booked**]", ":blue-background[**Partially Booked**]", ":red-background[**Not Booked**]")
     edited_df['date_in'] = pd.to_datetime(edited_df['date_in']).dt.date
     edited_df['date_out'] = pd.to_datetime(edited_df['date_out']).dt.date
-    edited_df["quantity_in"] = edited_df["quantity_in"].astype(int)
-    edited_df["quantity_left"] = edited_df["quantity_left"].astype(int)
-    edited_df["amount_in"] = edited_df["amount_in"].astype(int)
-    edited_df["balance_left"] = edited_df["balance_left"].astype(int)
+    # edited_df["quantity_in"] = edited_df["quantity_in"].astype(int)
+    # edited_df["quantity_left"] = edited_df["quantity_left"].astype(int)
+    # edited_df["amount_in"] = edited_df["amount_in"].astype(int)
+    # edited_df["balance_left"] = edited_df["balance_left"].astype(int)
     edited_df["price_in"] = edited_df["price_in"].apply(lambda x: round(x,2))
     edited_df["price_out"] = edited_df["price_out"].apply(lambda x: round(x,2))
     st.dataframe(edited_df.style.apply(highlight_survived, axis=1), use_container_width=True)
