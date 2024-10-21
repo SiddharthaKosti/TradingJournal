@@ -20,7 +20,7 @@ def style_dataframe(df):
                 })
 
 
-def trade_summaries(df):
+def trade_summaries(df, initial_amount):
     st.subheader("Trade Summaries")
 
     # Calculate and display summaries
@@ -56,15 +56,16 @@ def trade_summaries(df):
             st.metric(f"{base}", f"{count} ({open_count} open)", delta=None, delta_color="off")
 
     with col3:
-        st.metric("Total P/L", f"₹{total_profit_loss:.2f}", delta=None, delta_color="normal")
-        st.metric("P/L % (Balance Invested)", f"{profit_loss_percent_balance:.2f}% (₹{total_balance_left/100000:.2f}L)", delta=None, delta_color="normal")
-        st.metric("P/L % (Total Invested)", f"{profit_loss_percent_invested:.2f}% (₹{total_amount_in/100000:.2f}L)", delta=None, delta_color="normal")
-        st.metric("Avg P/L %", f"{avg_profit_loss_percent:.2f}%", delta=None, delta_color="normal")
-
-    with col4:
         # st.subheader("Top 4 Profitable Trade Bases")
         for base, row in trade_base_profits.head(4).iterrows():
             st.metric(f"{base} ({int(row['script_name'])} trades)", f"₹{row['P/L (INR)']:.2f}", delta=None, delta_color="off")
+
+    with col4:
+        st.metric("Total investement", f"₹{initial_amount}", delta=None, delta_color="normal")
+        st.metric("Total P/L", f"₹{total_profit_loss:.2f}", delta=None, delta_color="normal")
+        st.metric("P/L % (Current)", f"{profit_loss_percent_balance:.2f}% (₹{total_balance_left/100000:.2f}L)", delta=None, delta_color="normal")
+        st.metric("P/L % (Circulated)", f"{profit_loss_percent_invested:.2f}% (₹{total_amount_in/100000:.2f}L)", delta=None, delta_color="normal")
+        # st.metric("Avg P/L %", f"{avg_profit_loss_percent:.2f}%", delta=None, delta_color="normal")
 
     st.divider()
     # Display top profitable trades by amount and percentage with variable input

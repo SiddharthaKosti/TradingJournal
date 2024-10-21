@@ -17,6 +17,13 @@ def trade_data(df, csv_file):
         df["days_taken"] = df.apply(lambda row: 0 if pd.isna(row["date_out"]) or pd.isna(row["date_in"]) else 
                                     (row["date_out"] - row["date_in"]).days, axis=1)
         return df
+    
+    st.subheader("Amount Invested")
+    
+    initial_amount = st.number_input("Initial Amount Invested (INR)", min_value=0, value=1000000)
+    st.metric("Initial Amount Invested", f"₹{initial_amount}", delta=None, delta_color="off")
+
+    st.divider()
     st.subheader("Add/Edit Data")
 
     edited_df = st.data_editor(
@@ -61,3 +68,5 @@ def trade_data(df, csv_file):
     edited_df["price_in"] = edited_df["price_in"].apply(lambda x: round(x,2))
     edited_df["price_out"] = edited_df["price_out"].apply(lambda x: round(x,2))
     st.dataframe(edited_df.style.apply(highlight_survived, axis=1), use_container_width=True)
+
+    return initial_amount
