@@ -72,10 +72,10 @@ st.title("📊 Trade Data Management")
 tab1, tab2, tab3, tab4 = st.tabs(["📝 Add/Edit Trades", "📊 Trade Summaries", "📈 Monthly Profit Graph", ":chart: Yearly Performance"])
 
 with tab1:
-    trade_data(df, csv_file)
+    initial_amount = trade_data(df, csv_file)
 
 with tab2:
-    trade_summaries(df)
+    trade_summaries(df, initial_amount)
 
 with tab3:
     monthly_profit_graph(df)
