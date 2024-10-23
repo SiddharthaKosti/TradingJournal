@@ -32,8 +32,8 @@ def trade_summaries(df, initial_amount):
     total_balance_left = df["balance_left"].sum()
     total_amount_in = df["amount_in"].sum()
     profit_loss_percent_balance = (total_profit_loss / total_balance_left) * 100 if total_balance_left != 0 else 0
-    profit_loss_percent_invested = (total_profit_loss / total_amount_in) * 100 if total_amount_in != 0 else 0
-    avg_profit_loss_percent = df["P/L in %"].mean() * 100
+    profit_loss_percent_circulated = (total_profit_loss / total_amount_in) * 100 if total_amount_in != 0 else 0
+    profit_loss_percent_invested = (total_profit_loss/initial_amount) * 100
 
     # Calculate profit booked for each trade base
     trade_base_profits = df.groupby("trade_base").agg({
@@ -62,9 +62,9 @@ def trade_summaries(df, initial_amount):
 
     with col4:
         st.metric("Total investement", f"₹{initial_amount}", delta=None, delta_color="normal")
-        st.metric("Total P/L", f"₹{total_profit_loss:.2f}", delta=None, delta_color="normal")
-        st.metric("P/L % (Current)", f"{profit_loss_percent_balance:.2f}% (₹{total_balance_left/100000:.2f}L)", delta=None, delta_color="normal")
-        st.metric("P/L % (Circulated)", f"{profit_loss_percent_invested:.2f}% (₹{total_amount_in/100000:.2f}L)", delta=None, delta_color="normal")
+        st.metric("P/L", f"{profit_loss_percent_invested:.2f}% (₹{total_profit_loss:.2f})", delta=None, delta_color="normal")
+        st.metric("P/L % (Current Invested)", f"{profit_loss_percent_balance:.2f}% (₹{total_balance_left/100000:.2f}L)", delta=None, delta_color="normal")
+        st.metric("P/L % (Circulated)", f"{profit_loss_percent_circulated:.2f}% (₹{total_amount_in/100000:.2f}L)", delta=None, delta_color="normal")
         # st.metric("Avg P/L %", f"{avg_profit_loss_percent:.2f}%", delta=None, delta_color="normal")
 
     st.divider()
@@ -119,3 +119,10 @@ def trade_summaries(df, initial_amount):
         num_slowest_trades = st.number_input("Number of Slowest Trades to Display", min_value=1, value=5)
         top_by_slowest = df[df["days_taken"] > 0].nlargest(num_slowest_trades, "days_taken")[["script_name", "days_taken", "P/L (INR)", "P/L in %", "price_in", "price_out", "trade_base"]]
         st.dataframe(style_dataframe(top_by_slowest), use_container_width=True)
+
+    st.divider()
+    st.header("Recently booked trades")
+    num_recent_trades = st.number_input("Number of Recent Trades to Display", min_value=1, value=5)
+    df_recent = df[df["date_out"].notna()]
+    df_recent = df_recent.sort_values(by=["date_out"], ascending=False)
+    st.dataframe(style_dataframe(df_recent[["script_name", "price_in", "price_out", "P/L (INR)", "P/L in %", "days_taken", "date_out"]].head(num_recent_trades)), use_container_width=True)

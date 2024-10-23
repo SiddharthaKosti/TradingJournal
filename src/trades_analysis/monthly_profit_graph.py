@@ -71,7 +71,7 @@ def monthly_profit_graph(df):
     monthly_open_trades['month_in'] = monthly_open_trades['month_in'].astype(str)
 
     # Prepare data for number of trades booked in a month
-    booked_trades_df = df[df["quantity_left"] == 0]
+    booked_trades_df = df.copy()
     booked_trades_df['date_out'] = pd.to_datetime(booked_trades_df['date_out'])
     booked_trades_df['month_out'] = booked_trades_df['date_out'].dt.to_period('M')
     monthly_booked_trades = booked_trades_df.groupby('month_out').size().reset_index(name='booked_trades')

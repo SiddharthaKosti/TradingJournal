@@ -49,7 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-csv_file = Path("trade_data.csv")
+csv_file = Path("SKORM_Journal.csv")
 columns = [
     "script_name", "trade_base", "price_in", "quantity_in", "quantity_left", "date_in", 
     "amount_in", "balance_left", "date_out", "price_out",
