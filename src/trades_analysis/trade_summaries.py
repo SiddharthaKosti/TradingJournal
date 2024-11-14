@@ -62,7 +62,7 @@ def trade_summaries(df, initial_amount):
 
     with col4:
         st.metric("Total investement", f"₹{initial_amount}", delta=None, delta_color="normal")
-        st.metric("P/L", f"{profit_loss_percent_invested:.2f}% (₹{total_profit_loss:.2f})", delta=None, delta_color="normal")
+        st.metric("P/L", f"{profit_loss_percent_invested:.2f}% (₹{total_profit_loss/100000:.2f}L)", delta=None, delta_color="normal")
         st.metric("P/L % (Current Invested)", f"{profit_loss_percent_balance:.2f}% (₹{total_balance_left/100000:.2f}L)", delta=None, delta_color="normal")
         st.metric("P/L % (Circulated)", f"{profit_loss_percent_circulated:.2f}% (₹{total_amount_in/100000:.2f}L)", delta=None, delta_color="normal")
         # st.metric("Avg P/L %", f"{avg_profit_loss_percent:.2f}%", delta=None, delta_color="normal")
