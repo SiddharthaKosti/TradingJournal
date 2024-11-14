@@ -69,7 +69,7 @@ else:
 st.title("📊 Trade Data Management")
 
 # Create tabs with custom styling
-tab1, tab2, tab3, tab4 = st.tabs(["📝 Add/Edit Trades", "📊 Trade Summaries", "📈 Monthly Profit Graph", ":chart: Yearly Performance"])
+tab1, tab2, tab3, tab4 = st.tabs(["📝 Add/Edit Trades", "📊 Trade Summaries", "📈Profit Graph", ":chart: Yearly Performance"])
 
 with tab1:
     initial_amount = trade_data(df, csv_file)
