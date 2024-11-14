@@ -3,41 +3,47 @@ import plotly.graph_objects as go
 import streamlit as st
 
 def monthly_profit_graph(df):
-    st.subheader("Monthly Profit")
+    st.subheader("Profit Analysis")
 
-    # Prepare data for monthly profit graph
+    # Add a dropdown to select the period
+    period = st.selectbox("Select Period", ["Monthly", "Quarterly"])
+
+    # Prepare data for profit graph
     df['date_out'] = pd.to_datetime(df['date_out'])
-    df['month'] = df['date_out'].dt.to_period('M')
-    monthly_profits = df.groupby('month')['P/L (INR)'].sum().reset_index()
-    monthly_profits['month'] = monthly_profits['month'].astype(str)
+    if period == "Monthly":
+        df['period'] = df['date_out'].dt.to_period('M')
+    elif period == "Quarterly":
+        df['period'] = df['date_out'].dt.to_period('Q')
+    profits = df.groupby('period')['P/L (INR)'].sum().reset_index()
+    profits['period'] = profits['period'].astype(str)
 
     # Calculate cumulative sum for the curve
-    monthly_profits['cumulative_profit'] = monthly_profits['P/L (INR)'].cumsum()
+    profits['cumulative_profit'] = profits['P/L (INR)'].cumsum()
 
     # Create the graph using Plotly Graph Objects
     fig = go.Figure()
     fig.add_trace(go.Bar(
-        x=monthly_profits['month'],
-        y=monthly_profits['P/L (INR)'],
-        name='Monthly P/L',
-        text=monthly_profits['P/L (INR)'].apply(lambda x: f'₹{x:.2f}'),
+        x=profits['period'],
+        y=profits['P/L (INR)'],
+        name='P/L',
+        text=profits['P/L (INR)'].apply(lambda x: f'₹{x:.2f}'),
         textposition='inside',
-        marker_color=monthly_profits['P/L (INR)'].apply(lambda x: '#4CAF50' if x >= 0 else '#F44336')
+        marker_color=profits['P/L (INR)'].apply(lambda x: '#4CAF50' if x >= 0 else '#F44336')
     ))
 
     fig.add_trace(go.Scatter(
-        x=monthly_profits['month'],
-        y=monthly_profits['cumulative_profit'],
+        x=profits['period'],
+        y=profits['cumulative_profit'],
         name='Cumulative P/L',
         mode='lines+markers+text',
         line=dict(color='#FFA500', width=3),
         marker=dict(size=8),
-        text=monthly_profits['cumulative_profit'].apply(lambda x: f'₹{x:.2f}'),
+        text=profits['cumulative_profit'].apply(lambda x: f'₹{x:.2f}'),
         textposition='top center'
     ))
 
     fig.update_layout(
-        xaxis_title='Month',
+        xaxis_title='Period',
         yaxis_title='P/L (INR)',
         xaxis_tickangle=-45,
         height=650,
@@ -59,21 +65,30 @@ def monthly_profit_graph(df):
 
     # Prepare data for number of trades entered graph
     df['date_in'] = pd.to_datetime(df['date_in'])
-    df['month_in'] = df['date_in'].dt.to_period('M')
+    if period == "Monthly":
+        df['month_in'] = df['date_in'].dt.to_period('M')
+    elif period == "Quarterly":
+        df['month_in'] = df['date_in'].dt.to_period('Q')
     monthly_trades = df.groupby('month_in').size().reset_index(name='total_trades')
     monthly_trades['month_in'] = monthly_trades['month_in'].astype(str)
 
     # Prepare data for number of trades still open
     open_trades_df = df[df["quantity_left"] > 0]
     open_trades_df['date_in'] = pd.to_datetime(open_trades_df['date_in'])
-    open_trades_df['month_in'] = open_trades_df['date_in'].dt.to_period('M')
+    if period == "Monthly":
+        open_trades_df['month_in'] = open_trades_df['date_in'].dt.to_period('M')
+    elif period == "Quarterly":
+        open_trades_df['month_in'] = open_trades_df['date_in'].dt.to_period('Q')
     monthly_open_trades = open_trades_df.groupby('month_in').size().reset_index(name='open_trades')
     monthly_open_trades['month_in'] = monthly_open_trades['month_in'].astype(str)
 
     # Prepare data for number of trades booked in a month
     booked_trades_df = df.copy()
     booked_trades_df['date_out'] = pd.to_datetime(booked_trades_df['date_out'])
-    booked_trades_df['month_out'] = booked_trades_df['date_out'].dt.to_period('M')
+    if period == "Monthly":
+        booked_trades_df['month_out'] = booked_trades_df['date_out'].dt.to_period('M')
+    elif period == "Quarterly":
+        booked_trades_df['month_out'] = booked_trades_df['date_out'].dt.to_period('Q')
     monthly_booked_trades = booked_trades_df.groupby('month_out').size().reset_index(name='booked_trades')
     monthly_booked_trades['month_out'] = monthly_booked_trades['month_out'].astype(str)
 
